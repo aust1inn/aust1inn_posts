@@ -15,7 +15,9 @@ class User(db.Model, UserMixin):
     image_file=db.Column(db.String(20),nullable=False,default='default.jpg')
     password=db.Column(db.String(60),nullable=False)
     posts=db.relationship('Post',backref='author',lazy=True)
-    
+    comment = db.relationship('Comment', backref='author', lazy='dynamic')
+
+
     @property
     def password(self):
         raise AttributeError('You cannot read the password attribute')
@@ -37,6 +39,33 @@ class Post(db.Model):
     date_posted=db.Column(db.DateTime,nullable=False,default=datetime.utcnow)
     content=db.Column(db.Text, nullable=False)
     user_id=db.Column(db.Integer,db.ForeignKey('user.id'),nullable=False)
+    comment = db.relationship('Comment', backref='post', lazy='dynamic')
+
 
     def __repr__(self):
         return f"User('{self.title}','{self.date_posted}')"
+
+class Comment(db.Model):
+    __tablename__='comments'
+
+    id = db.Column(db.Integer,primary_key = True)
+    comment = db.Column(db.String)
+    posted = db.Column(db.DateTime,default=datetime.utcnow)
+    blog_id = db.Column(db.Integer,db.ForeignKey("post.id"))
+    user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.remove(self)
+        db.session.commit()
+
+    def get_comment(id):
+        comment = Comment.query.all(id=id)
+        return comment
+
+
+    def __repr__(self):
+        return f'Comment {self.comment}'
