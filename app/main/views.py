@@ -1,3 +1,5 @@
+from . import main
+
 import secrets,os
 from .. import bcrypt,db
 from PIL import Image
@@ -6,23 +8,20 @@ from .forms import RegistrationForm,LoginForm,UpdateAccountForm,PostForm
 from ..models import User,Post,Comment
 from flask_login import login_user,current_user,logout_user,login_required
 
-from . import main
 
 # Views
 @main.route('/')
 @main.route('/home')
 
 def home():
-    name = "Time to get started "
-    # context ={
-    #     name: name
-    # }
-    return render_template('home.html', name=name)
+    page=request.args.get('page',1,type=int)
+    posts=Post.query.order_by(Post.date_posted.desc()).paginate(page=page,per_page=4)
+    return render_template('home.html' , posts=posts)
 
 @main.route('/register',methods=['GET','POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('main.home'))
     form =RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -37,14 +36,14 @@ def register():
 @main.route('/login',methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('main.home'))
     form =LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page= request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('main.index'))
+            return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:    
             flash("Login unsuccesful.Please check email and password",'danger')
 
@@ -53,7 +52,7 @@ def login():
 @main.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('home'))    
+    return redirect(url_for('main.home'))    
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
@@ -82,7 +81,7 @@ def account():
         current_user.email=form.email.data
         db.session.commit()
         flash('Your account has been updated', 'success')
-        return redirect(url_for('account'))
+        return redirect(url_for('main.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
@@ -100,7 +99,7 @@ def new_post():
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created','success')
-        return redirect(url_for('home'))
+        return redirect(url_for('main.home'))
     return render_template('create_post.html' ,title='New Post',form=form,legend='New post')    
 
 @main.route('/post/<int:post_id>')
@@ -138,7 +137,7 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
 
 @main.route("/user/<string:username>")
 def user_posts(username):
