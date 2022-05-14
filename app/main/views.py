@@ -3,9 +3,11 @@ from . import main
 
 # Views
 @main.route('/')
-def index():
+@main.route('/home')
+
+def home():
     name = "Time to get started "
     # context ={
     #     name: name
     # }
-    return render_template('index.html', name=name)
+    return render_template('home.html', name=name)
