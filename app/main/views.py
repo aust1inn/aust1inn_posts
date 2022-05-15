@@ -6,6 +6,7 @@ from flask import render_template,url_for,flash,redirect,request,abort
 from .forms import RegistrationForm,LoginForm,UpdateAccountForm,PostForm,CommentForm
 from ..models import User,Post,Comment
 from flask_login import login_user,current_user,logout_user,login_required
+from app.requests import get_quotes
 
 
 # Views
@@ -108,19 +109,18 @@ def post(post_id):
     return render_template('post.html',title=post.title,post=post) 
 
 @main.route('/comment/<int:post_id>', methods = ['POST','GET'])
-@login_required
 def comment(post_id):
     form = CommentForm()
     title='comment'
     pitch = Post.query.get(post_id)
-    all_comments = Comment.query.filter_by(post_id = post_id).all()
+    all_comments = Comment.query.filter_by(post_id=post_id).all()
     if form.validate_on_submit():
         comment = form.comment.data 
         post_id = post_id
         user_id = current_user._get_current_object().id
         new_comment = Comment(comment = comment,user_id = user_id,post_id = post_id)
         new_comment.save_comment()
-        return redirect(url_for('.comment', pitch_id = post_id))
+        return redirect(url_for('.comment', post_id = post_id))
     return render_template('comment.html', form =form, pitch = pitch,all_comments=all_comments,title=title)
 
 
