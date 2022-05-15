@@ -11,4 +11,17 @@ h3{
 
 .article-content{
     font-family: 'Poppins', sans-serif;
+
 }
+
+.myquote{
+    font-family: 'Poppins', sans-serif;
+    background-color: rgb(72, 106, 218);
+}
+
+.account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
