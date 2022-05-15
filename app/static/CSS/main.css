@@ -19,9 +19,22 @@ h3{
     background-color: rgb(72, 106, 218);
 }
 
+.myquote h4 {
+    color: royalblue;
+}
+
 .account-img {
-    height: 125px;
-    width: 125px;
+    height: 80px;
+    width: 80px;
     margin-right: 20px;
     margin-bottom: 16px;
+  }
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  .myTitle{
+      display: flex;
+      flex-direction: column;
   }
