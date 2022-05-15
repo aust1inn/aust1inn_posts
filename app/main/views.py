@@ -14,9 +14,10 @@ from app.requests import get_quotes
 @main.route('/home')
 
 def home():
+    quotes = get_quotes()
     page=request.args.get('page',1,type=int)
     posts=Post.query.order_by(Post.date_posted.desc()).paginate(page=page,per_page=4)
-    return render_template('home.html' , posts=posts)
+    return render_template('home.html' , posts=posts , quote=quotes)
 
 @main.route('/register',methods=['GET','POST'])
 def register():
