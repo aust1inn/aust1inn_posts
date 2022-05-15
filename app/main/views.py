@@ -4,7 +4,8 @@ from .. import bcrypt,db
 from PIL import Image
 from flask import render_template,url_for,flash,redirect,request,abort
 from .forms import RegistrationForm,LoginForm,UpdateAccountForm,PostForm,CommentForm
-from ..models import User,Post,Comment
+from ..models import User,Post,Comment,Subscriber
+from ..email import mail_message
 from flask_login import login_user,current_user,logout_user,login_required
 from app.requests import get_quotes
 
@@ -164,3 +165,13 @@ def user_posts(username):
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
     return render_template('user_posts.html', posts=posts, user=user)          
+
+
+@main.route('/subscribe',methods = ['POST','GET'])
+def subscribe():
+    email = request.form.get('subscriber')
+    new_subscriber = Subscriber(email = email)
+    new_subscriber.save_subscriber()
+    mail_message("Subscribed to Aust1inn-posts","email/welcome_subscriber",new_subscriber.email,new_subscriber=new_subscriber)
+    flash('Sucessfuly subscribed')
+    return redirect(url_for('main.home'))

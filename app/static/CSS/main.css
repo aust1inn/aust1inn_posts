@@ -16,11 +16,11 @@ h3{
 
 .myquote{
     font-family: 'Poppins', sans-serif;
-    background-color: rgb(72, 106, 218);
+    background-color: rgb(155, 172, 226);
 }
 
 .myquote h4 {
-    color: royalblue;
+    color: rgb(39, 39, 41);
 }
 
 .account-img {
@@ -30,8 +30,8 @@ h3{
     margin-bottom: 16px;
   }
   .article-img {
-    height: 65px;
-    width: 65px;
+    height: 90px;
+    width: 90px;
     margin-right: 16px;
   }
   .myTitle{
