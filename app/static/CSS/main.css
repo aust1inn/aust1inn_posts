@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Macondo&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Macondo&family=Poppins:wght@100&display=swap');
 .mynav{
     background-color: rgb(104, 31, 31);
     font-family: 'Macondo', cursive;
@@ -8,4 +7,8 @@
 h3{
     font-family: 'Macondo', cursive;
     color: white;
+}
+
+.article-content{
+    font-family: 'Poppins', sans-serif;
 }
