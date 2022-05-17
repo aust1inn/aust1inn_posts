@@ -1,4 +1,4 @@
-# D-Blog
+# Aust1inn-posts
 ## Author
 
 [Austin Omondi](https://github.com/aust1inn)
